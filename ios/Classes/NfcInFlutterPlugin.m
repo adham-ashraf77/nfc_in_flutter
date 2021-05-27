@@ -467,8 +467,7 @@
     }
 }
 
-- (void)readerSession:(NFCNDEFReaderSession *)session
-        didDetectTags:(NSArray<__kindof id<NFCNDEFTag>> *)tags API_AVAILABLE(ios(13.0)) {
+- (void)readerSession:(nonnull NFCNDEFReaderSession *)session didDetectNDEFs:(nonnull NSArray *)messages API_AVAILABLE(ios(11.0)) {
     // Iterate through the tags and send them to Flutter with the following structure:
     // { Map
     //   "id": "", // empty
