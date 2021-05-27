@@ -467,44 +467,6 @@
     }
 }
 
-- (void)readerSession:(nonnull NFCNDEFReaderSession *)session didDetectNDEFs:(nonnull NSArray *)messages API_AVAILABLE(ios(11.0)) {
-    // Iterate through the tags and send them to Flutter with the following structure:
-    // { Map
-    //   "id": "", // empty
-    //   "message_type": "ndef",
-    //   "records": [ List
-    //     { Map
-    //       "type": "The record's content type",
-    //       "payload": "The record's payload",
-    //       "id": "The record's identifier",
-    //     }
-    //   ]
-    // }
-    
-    for (id<NFCNDEFTag> tag in tags) {
-        [session connectToTag:tag completionHandler:^(NSError * _Nullable error) {
-            if (error != nil) {
-                NSLog(@"connect error: %@", error.localizedDescription);
-                return;
-            }
-            [tag readNDEFWithCompletionHandler:^(NFCNDEFMessage * _Nullable message, NSError * _Nullable error) {
-                
-                if (error != nil && error.code != 403) {
-                    NSLog(@"ERROR: %@", error.localizedDescription);
-                    return;
-                }
-                
-                NSDictionary* result = [self formatMessageWithIdentifier:@"" message:message];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self->events != nil) {
-                        self->events(result);
-                    }
-                });
-            }];
-        }];
-    }
-}
-
 - (void)readerSessionDidBecomeActive:(NFCNDEFReaderSession *)session API_AVAILABLE(ios(13.0)) {}
 
 - (void)writeToTag:(NSDictionary*)data completionHandler:(void (^_Nonnull) (FlutterError * _Nullable error))completionHandler {
